@@ -1,4 +1,4 @@
-package com.matera.blog.model;
+package br.com.contabilidade.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -29,17 +29,14 @@ public class Post implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@SuppressWarnings("deprecation")
 	@Column(nullable = false, length = 150) //Define propriedades da coluna
 	@NotBlank(message = "Autor é uma informação obrigatória.") //Define qual mensagem será exibida caso a validação da coluna falhar
 	private String autor;
 	
-	@SuppressWarnings("deprecation")
 	@Column(nullable = false, length = 150)
 	@NotBlank(message = "Título é uma informação obrigatória.")
 	private String titulo;
 	
-	@SuppressWarnings("deprecation")
 	@Column(nullable = false)
 	@Lob
 	@NotBlank(message = "Texto é uma informação obrigatória.")

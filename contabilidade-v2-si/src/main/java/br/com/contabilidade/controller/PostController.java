@@ -1,4 +1,4 @@
-package com.matera.blog.controller;
+package br.com.contabilidade.controller;
 
 import java.util.Optional;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.matera.blog.model.Post;
-import com.matera.blog.service.PostService;
+import br.com.contabilidade.model.Post;
+import br.com.contabilidade.service.PostService;
 
 @Controller //Define a classe como um bean do Spring
 public class PostController {
