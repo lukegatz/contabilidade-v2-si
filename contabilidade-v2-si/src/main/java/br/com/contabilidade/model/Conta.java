@@ -23,6 +23,8 @@ public class Conta implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	protected Conta() {}
+	
 	/**
 	 * Construtor. (BUILDER AQUI!!)
 	 * 

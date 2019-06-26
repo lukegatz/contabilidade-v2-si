@@ -1,16 +1,26 @@
 package br.com.contabilidade.model;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Value;
 
 @SuppressWarnings("deprecation")
-//@Entity(name = "clienteDB") //Define o nome da tabela que será criada no banco de dados
+@Entity(name = "clienteDB") //Define o nome da tabela que será criada no banco de dados
 public class Cliente implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+	protected Cliente() {}
 	
 	/**
 	 * Construtor. (BUILDER AQUI!!)
@@ -33,7 +43,7 @@ public class Cliente implements Serializable {
 	 */
 	public Cliente(Long id_cliente, String nome, Integer cEP,
 			String endereco, String numero, String bairro, String cidade, String estado, Integer cPF, Integer cNPJ,
-			Integer id_telefone, String email, Character tipo_pessoa, boolean is_CPF, boolean is_CNPJ) {
+			Integer id_telefone, String email, TipoPessoaENUM tipo_pessoa) { // boolean is_CPF, boolean is_CNPJ
 		super();
 		this.id_cliente = id_cliente;
 		this.nome = nome;
@@ -48,21 +58,19 @@ public class Cliente implements Serializable {
 		this.id_telefone = id_telefone;
 		this.email = email;
 		this.tipo_pessoa = tipo_pessoa;
-		this.is_CPF = is_CPF;
-		this.is_CNPJ = is_CNPJ;
+//		this.is_CPF = is_CPF;
+//		this.is_CNPJ = is_CNPJ;
 	}
-
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@SequenceGenerator(name = "cliente_seq", sequenceName = "cliente_seq") //Cria uma sequence para ser usada com a tabela
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cliente_seq") //Define que a tabela fará uso da sequence criada antes
 	private Long id_cliente;
-	
+
 	@Column(nullable = false, length = 150) //Define propriedades da coluna
 	@NotBlank(message = "Nome é uma informação obrigatória.") //Define qual mensagem será exibida caso a validação da coluna falhar
 	private String nome;
-	
+
 	@Column(nullable = false)
 	private Integer CEP;
 
@@ -93,14 +101,17 @@ public class Cliente implements Serializable {
 	@Column(nullable = false)
 	private String email;
 
-	@Column(nullable = false)
-	private Character tipo_pessoa;
+	@Enumerated(EnumType.STRING)
+    @Column(length = 10)
+	private TipoPessoaENUM tipo_pessoa;
 
-	@Column
-	private boolean is_CPF;
-
-	@Column
-	private boolean is_CNPJ;
+//	@Column
+//	@Value("false")
+//	private boolean is_CPF;
+//
+//	@Column
+//	@Value("false")
+//	private boolean is_CNPJ;
 
 	// getters & setters
 	public Long getId_cliente() {
@@ -199,27 +210,27 @@ public class Cliente implements Serializable {
 		this.email = email;
 	}
 
-	public Character getTipo_pessoa() {
+	public TipoPessoaENUM getTipo_pessoa() {
 		return tipo_pessoa;
 	}
 
-	public void setTipo_pessoa(Character tipo_pessoa) {
+	public void setTipo_pessoa(TipoPessoaENUM tipo_pessoa) {
 		this.tipo_pessoa = tipo_pessoa;
 	}
 
-	public boolean isIs_CPF() {
-		return is_CPF;
-	}
-
-	public void setIs_CPF(boolean is_CPF) {
-		this.is_CPF = is_CPF;
-	}
-
-	public boolean isIs_CNPJ() {
-		return is_CNPJ;
-	}
-
-	public void setIs_CNPJ(boolean is_CNPJ) {
-		this.is_CNPJ = is_CNPJ;
-	}
+//	public boolean isIs_CPF() {
+//		return is_CPF;
+//	}
+//
+//	public void setIs_CPF(boolean is_CPF) {
+//		this.is_CPF = is_CPF;
+//	}
+//
+//	public boolean isIs_CNPJ() {
+//		return is_CNPJ;
+//	}
+//
+//	public void setIs_CNPJ(boolean is_CNPJ) {
+//		this.is_CNPJ = is_CNPJ;
+//	}
 }

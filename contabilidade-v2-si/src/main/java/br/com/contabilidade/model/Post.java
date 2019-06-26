@@ -22,6 +22,7 @@ public class Post implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	protected Post() {}
 	
 //	@SequenceGenerator(name = "post_seq", sequenceName = "post_seq") //Cria uma sequence para ser usada com a tabela
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_seq") //Define que a tabela fará uso da sequence criada antes

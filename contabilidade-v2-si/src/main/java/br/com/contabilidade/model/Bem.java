@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,10 +17,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @SuppressWarnings("deprecation")
-//@Entity(name = "bemDB") //Define o nome da tabela que será criada no banco de dados
+@Entity(name = "bemDB") //Define o nome da tabela que será criada no banco de dados
 public class Bem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	protected Bem() {}
 	
 	/**
 	 * Construtor. (BUILDER AQUI!!)

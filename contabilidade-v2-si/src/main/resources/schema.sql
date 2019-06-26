@@ -25,6 +25,14 @@ CREATE TABLE IF NOT EXISTS tipo_contaDB (
 );
 
 
+DROP TABLE IF EXISTS tipo_pessoaDB;
+
+CREATE TABLE IF NOT EXISTS tipo_pessoaDB (
+  id_tipo_pessoa INT NOT NULL PRIMARY KEY,
+  tipo VARCHAR(30) NOT NULL
+);
+
+
 DROP TABLE IF EXISTS contaDB;
 
 CREATE TABLE IF NOT EXISTS contaDB (
@@ -132,6 +140,7 @@ DROP sequence IF EXISTS conta_seq;
 DROP sequence IF EXISTS cliente_seq;
 DROP sequence IF EXISTS tipo_bem_seq;
 DROP sequence IF EXISTS tipo_conta_seq;
+DROP sequence IF EXISTS tipo_pessoa_seq;
 DROP sequence IF EXISTS telefone_seq;
 DROP sequence IF EXISTS usuario_seq;
 DROP sequence IF EXISTS bem_seq;
@@ -145,6 +154,7 @@ create sequence conta_seq start with 1 increment by 1;
 create sequence cliente_seq start with 1 increment by 1;
 create sequence tipo_bem_seq start with 1 increment by 1;
 create sequence tipo_conta_seq start with 1 increment by 1;
+create sequence tipo_pessoa_seq start with 1 increment by 1;
 create sequence telefone_seq start with 1 increment by 1;
 create sequence usuario_seq start with 1 increment by 1;
 create sequence bem_seq start with 1 increment by 1;

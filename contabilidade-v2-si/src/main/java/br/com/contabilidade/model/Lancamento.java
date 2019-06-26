@@ -20,6 +20,8 @@ public class Lancamento implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	protected Lancamento() {}
+	
 	/**
 	 * Construtor. (BUILDER AQUI!!)
 	 * 
