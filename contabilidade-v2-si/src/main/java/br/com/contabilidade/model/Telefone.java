@@ -3,9 +3,12 @@ package br.com.contabilidade.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -21,15 +24,13 @@ public class Telefone implements Serializable {
 	 * Construtor.
 	 * 
 	 * @param id_fone
-	 * @param id_cliente
 	 * @param tipo
 	 * @param numero
 	 */
-	public Telefone(Long id_fone, Long id_cliente, String tipo,
+	public Telefone(Long id_fone, String tipo,
 			Integer numero) {
 		super();
 		this.id_fone = id_fone;
-		this.id_cliente = id_cliente;
 		this.tipo = tipo;
 		this.numero = numero;
 	}
@@ -39,15 +40,17 @@ public class Telefone implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "telefone_seq") 	//Define que a tabela fará uso da sequence criada antes
 	private Long id_fone;
 	
-	@Column(nullable = false)
-	private Long id_cliente;
-	
 	@Column
 	private String tipo;
 	
 	@Column(nullable = false)
 	@NotBlank(message = "Telefone é uma informação obrigatória.")
 	private Integer numero;
+	
+	// chave estrangeira
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cliente_id_cliente", nullable = false)
+	private Cliente cliente;
 	
 	// getters & setters
 	public Long getId_fone() {
@@ -56,14 +59,6 @@ public class Telefone implements Serializable {
 
 	public void setId_fone(Long id_fone) {
 		this.id_fone = id_fone;
-	}
-
-	public Long getId_cliente() {
-		return id_cliente;
-	}
-
-	public void setId_cliente(Long id_cliente) {
-		this.id_cliente = id_cliente;
 	}
 
 	public String getTipo() {

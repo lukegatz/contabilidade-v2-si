@@ -3,11 +3,15 @@ package br.com.contabilidade.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,20 +33,19 @@ public class Bem implements Serializable {
 	 * 
 	 * @param id_bem
 	 * @param descricao
-	 * @param id_tipo_bem
+	 * @param tipo_bem
 	 * @param valor
 	 * @param documento
 	 * @param data_cadastro
 	 * @param chapa
 	 */
-	public Bem(Long id_bem, @NotBlank(message = "Autor é uma informação obrigatória.") String descricao,
-			Long id_tipo_bem, Double valor,
-			@NotBlank(message = "Documento é uma informação obrigatória.") String documento,
-			@NotNull(message = "Data é uma informação obrigatória.") Date data_cadastro, String chapa) {
+	public Bem(Long id_bem, String descricao,
+			TipoBem tipo_bem, Double valor,
+			String documento, Date data_cadastro, String chapa) {
 		super();
 		this.id_bem = id_bem;
 		this.descricao = descricao;
-		this.id_tipo_bem = id_tipo_bem;
+		this.tipo_bem = tipo_bem;
 		this.valor = valor;
 		this.documento = documento;
 		this.data_cadastro = data_cadastro;
@@ -55,11 +58,13 @@ public class Bem implements Serializable {
 	private Long id_bem;
 	
 	@Column(nullable = false, length = 150) //Define propriedades da coluna
-	@NotBlank(message = "Autor é uma informação obrigatória.") //Define qual mensagem será exibida caso a validação da coluna falhar
+	@NotBlank(message = "Descrição é uma informação obrigatória.") //Define qual mensagem será exibida caso a validação da coluna falhar
 	private String descricao;
 	
-	@Column(nullable = false)
-	private Long id_tipo_bem;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "bem")
+	private TipoBem tipo_bem;
 	
 	@Column
 	private Double valor;
@@ -76,6 +81,11 @@ public class Bem implements Serializable {
 	
 	@Column
 	private String chapa;
+	
+	// chaves estrangeiras
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "lanc_bem_id_lancamento", nullable = false)
+	private Lancamento lanc_bem;
 
 	public Long getId_bem() {
 		return id_bem;
@@ -93,12 +103,12 @@ public class Bem implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Long getId_tipo_bem() {
-		return id_tipo_bem;
+	public TipoBem getTipo_bem() {
+		return tipo_bem;
 	}
 
-	public void setId_tipo_bem(Long id_tipo_bem) {
-		this.id_tipo_bem = id_tipo_bem;
+	public void setTipo_bem(TipoBem tipo_bem) {
+		this.tipo_bem = tipo_bem;
 	}
 
 	public Double getValor() {

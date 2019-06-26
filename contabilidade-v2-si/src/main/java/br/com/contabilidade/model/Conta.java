@@ -3,18 +3,22 @@ package br.com.contabilidade.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @SuppressWarnings("deprecation")
@@ -41,14 +45,12 @@ public class Conta implements Serializable {
 	 * @param nr_seq_03
 	 * @param nr_seq_04
 	 */
-	public Conta(Long id_conta, Long id_cliente,
-			@NotBlank(message = "Título é uma informação obrigatória.") String titulo, Long tipo,
-			@NotNull(message = "Data é uma informação obrigatória.") Date data_criacao, Double valor_inicial,
+	public Conta(Long id_conta, Cliente cliente, String titulo, TipoConta tipo, Date data_criacao, Double valor_inicial,
 			boolean is_imobilizado, boolean is_totalizadora, int nr_seq_01, int nr_seq_02, int nr_seq_03,
 			int nr_seq_04) {
 		super();
 		this.id_conta = id_conta;
-		this.id_cliente = id_cliente;
+		this.cliente = cliente;
 		this.titulo = titulo;
 		this.tipo = tipo;
 		this.data_criacao = data_criacao;
@@ -66,16 +68,19 @@ public class Conta implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "conta_seq") //Define que a tabela fará uso da sequence criada antes
 	private Long id_conta;
 	
-//	@ForeignKey(name="foreign", table="clienteDB")
-	@Column(nullable = false)
-	private Long id_cliente;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "conta")
+	private Cliente cliente;
 	
 	@Column(nullable = false, length = 150) //Define propriedades da coluna
 	@NotBlank(message = "Título é uma informação obrigatória.") //Define qual mensagem será exibida caso a validação da coluna falhar
 	private String titulo;
 	
-	@Column(nullable = false)
-	private Long tipo;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "conta2")
+	private TipoConta tipo;
 	
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
@@ -87,9 +92,11 @@ public class Conta implements Serializable {
 	private Double valor_inicial;
 	
 	@Column
+	@Value("false")
 	private boolean is_imobilizado;
 	
 	@Column
+	@Value("false")
 	private boolean is_totalizadora;
 
 	@Column
@@ -104,6 +111,11 @@ public class Conta implements Serializable {
 	@Column
 	private int nr_seq_04;
 	
+	// chave estrangeira
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "lanc_conta_id_lancamento", nullable = false)
+	private Lancamento lanc_conta;
+	
 	// getters & setters
 	public Long getId_conta() {
 		return id_conta;
@@ -113,12 +125,12 @@ public class Conta implements Serializable {
 		this.id_conta = id_conta;
 	}
 
-	public Long getId_cliente() {
-		return id_cliente;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setId_cliente(Long id_cliente) {
-		this.id_cliente = id_cliente;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public String getTitulo() {
@@ -129,11 +141,11 @@ public class Conta implements Serializable {
 		this.titulo = titulo;
 	}
 
-	public Long getTipo() {
+	public TipoConta getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(Long tipo) {
+	public void setTipo(TipoConta tipo) {
 		this.tipo = tipo;
 	}
 

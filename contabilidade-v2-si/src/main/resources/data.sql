@@ -18,7 +18,10 @@ insert into tipo_pessoaDB  values(2, 'Jurídico');
 
 
 -- insert into DEPRECIACAO
-
+insert into depreciacaoDB  values(1, 1, 20, 5);
+insert into depreciacaoDB  values(2, 2, 10, 10);
+insert into depreciacaoDB  values(3, 3, 10, 10);
+insert into depreciacaoDB  values(4, 4, 10, 10);
 
 -- insert into CLIENTES
 insert into clienteDB  values( 1, 'Raj', 2222, 'Rua um', '3A', 'ABC', 'Sao Paulo', 'SP', 123, 0, 2, 'raj@raj.com', 'F', true, false);

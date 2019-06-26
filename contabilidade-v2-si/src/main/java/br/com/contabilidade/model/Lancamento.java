@@ -3,16 +3,20 @@ package br.com.contabilidade.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity(name = "lancamentoDB") //Define o nome da tabela que será criada no banco de dados
@@ -26,21 +30,21 @@ public class Lancamento implements Serializable {
 	 * Construtor. (BUILDER AQUI!!)
 	 * 
 	 * @param id_lancamento
-	 * @param id_conta
-	 * @param id_cliente
-	 * @param id_bem
+	 * @param conta
+	 * @param cliente
+	 * @param bem
 	 * @param valor
 	 * @param data
 	 * @param is_debito
 	 * @param is_credito
 	 */
-	public Lancamento(Long id_lancamento, Long id_conta, Long id_cliente, Long id_bem, Double valor,
+	public Lancamento(Long id_lancamento, Conta conta, Cliente cliente, Bem bem, Double valor,
 			Date data, boolean is_debito, boolean is_credito) {
 		super();
 		this.id_lancamento = id_lancamento;
-		this.id_conta = id_conta;
-		this.id_cliente = id_cliente;
-		this.id_bem = id_bem;
+		this.conta = conta;
+		this.cliente = cliente;
+		this.bem = bem;
 		this.valor = valor;
 		this.data = data;
 		this.is_debito = is_debito;
@@ -52,14 +56,20 @@ public class Lancamento implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lancamento_seq") 	//Define que a tabela fará uso da sequence criada antes
 	private Long id_lancamento;
 	
-	@Column(nullable = false)
-	private Long id_conta;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "lanc_conta")
+	private Conta conta;
 	
-	@Column(nullable = false)
-	private Long id_cliente;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "lanc_cli")
+	private Cliente cliente;
 	
-	@Column(nullable = false)
-	private Long id_bem;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "lanc_bem")
+	private Bem bem;
 	
 	@Column
 	private Double valor;
@@ -71,9 +81,11 @@ public class Lancamento implements Serializable {
 	private Date data;
 	
 	@Column
+	@Value("false")
 	private boolean is_debito;
 	
 	@Column
+	@Value("false")
 	private boolean is_credito;
 	
 	// getters & setters
@@ -85,28 +97,28 @@ public class Lancamento implements Serializable {
 		this.id_lancamento = id_lancamento;
 	}
 
-	public Long getId_conta() {
-		return id_conta;
+	public Conta getConta() {
+		return conta;
 	}
 
-	public void setId_conta(Long id_conta) {
-		this.id_conta = id_conta;
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 
-	public Long getId_cliente() {
-		return id_cliente;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setId_cliente(Long id_cliente) {
-		this.id_cliente = id_cliente;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public Long getId_bem() {
-		return id_bem;
+	public Bem getBem() {
+		return bem;
 	}
 
-	public void setId_bem(Long id_bem) {
-		this.id_bem = id_bem;
+	public void setBem(Bem bem) {
+		this.bem = bem;
 	}
 
 	public Double getValor() {

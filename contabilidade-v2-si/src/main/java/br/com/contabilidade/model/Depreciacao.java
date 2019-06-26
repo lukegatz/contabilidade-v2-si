@@ -2,11 +2,14 @@ package br.com.contabilidade.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity(name = "depreciacaoDB") //Define o nome da tabela que será criada no banco de dados
@@ -20,14 +23,14 @@ public class Depreciacao implements Serializable {
 	 * Construtor.
 	 * 
 	 * @param id_deprec
-	 * @param id_tipo_bem
+	 * @param tipo_bem
 	 * @param taxa
 	 * @param vidaUtil
 	 */
-	public Depreciacao(Long id_deprec, Long id_tipo_bem, Double taxa, Integer vidaUtil) {
+	public Depreciacao(Long id_deprec, TipoBem tipo_bem, Double taxa, Integer vidaUtil) {
 		super();
 		this.id_deprec = id_deprec;
-		this.id_tipo_bem = id_tipo_bem;
+		this.tipo_bem = tipo_bem;
 		this.taxa = taxa;
 		this.vidaUtil = vidaUtil;
 	}
@@ -37,8 +40,10 @@ public class Depreciacao implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "deprec_seq") //Define que a tabela fará uso da sequence criada antes
 	private Long id_deprec;
 	
-	@Column(nullable = false)
-	private Long id_tipo_bem;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "deprec")
+	private TipoBem tipo_bem;
 	
 	@Column(nullable = false)
 	private Double taxa;
@@ -55,12 +60,12 @@ public class Depreciacao implements Serializable {
 		this.id_deprec = id_deprec;
 	}
 
-	public Long getId_tipo_bem() {
-		return id_tipo_bem;
+	public TipoBem getTipo_bem() {
+		return tipo_bem;
 	}
 
-	public void setId_tipo_bem(Long id_tipo_bem) {
-		this.id_tipo_bem = id_tipo_bem;
+	public void setTipo_bem(TipoBem tipo_bem) {
+		this.tipo_bem = tipo_bem;
 	}
 
 	public Double getTaxa() {

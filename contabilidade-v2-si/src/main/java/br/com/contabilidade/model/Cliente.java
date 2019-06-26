@@ -2,13 +2,17 @@ package br.com.contabilidade.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -35,7 +39,7 @@ public class Cliente implements Serializable {
 	 * @param estado
 	 * @param cPF
 	 * @param cNPJ
-	 * @param id_telefone
+	 * @param telefone
 	 * @param email
 	 * @param tipo_pessoa
 	 * @param is_CPF
@@ -43,7 +47,8 @@ public class Cliente implements Serializable {
 	 */
 	public Cliente(Long id_cliente, String nome, Integer cEP,
 			String endereco, String numero, String bairro, String cidade, String estado, Integer cPF, Integer cNPJ,
-			Integer id_telefone, String email, TipoPessoaENUM tipo_pessoa) { // boolean is_CPF, boolean is_CNPJ
+			Telefone telefone, String email, TipoPessoaENUM tipo_pessoa,
+			boolean is_CPF, boolean is_CNPJ) { 
 		super();
 		this.id_cliente = id_cliente;
 		this.nome = nome;
@@ -55,11 +60,11 @@ public class Cliente implements Serializable {
 		this.estado = estado;
 		CPF = cPF;
 		CNPJ = cNPJ;
-		this.id_telefone = id_telefone;
+		this.telefone = telefone;
 		this.email = email;
 		this.tipo_pessoa = tipo_pessoa;
-//		this.is_CPF = is_CPF;
-//		this.is_CNPJ = is_CNPJ;
+		this.is_CPF = is_CPF;
+		this.is_CNPJ = is_CNPJ;
 	}
 
 	@Id
@@ -95,8 +100,10 @@ public class Cliente implements Serializable {
 	@Column
 	private Integer CNPJ;
 
-	@Column(nullable = false)
-	private Integer id_telefone;
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.PERSIST,
+            mappedBy = "cliente")
+	private Telefone telefone;
 
 	@Column(nullable = false)
 	private String email;
@@ -105,13 +112,22 @@ public class Cliente implements Serializable {
     @Column(length = 10)
 	private TipoPessoaENUM tipo_pessoa;
 
-//	@Column
-//	@Value("false")
-//	private boolean is_CPF;
-//
-//	@Column
-//	@Value("false")
-//	private boolean is_CNPJ;
+	@Column
+	@Value("false")
+	private boolean is_CPF;
+
+	@Column
+	@Value("false")
+	private boolean is_CNPJ;
+	
+	// chaves estrangeiras
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "conta_id_conta", nullable = false)
+	private Conta conta;
+	
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "lanc_cli_id_lancamento", nullable = false)
+	private Lancamento lanc_cli;
 
 	// getters & setters
 	public Long getId_cliente() {
@@ -194,12 +210,12 @@ public class Cliente implements Serializable {
 		CNPJ = cNPJ;
 	}
 
-	public Integer getId_telefone() {
-		return id_telefone;
+	public Telefone getTelefone() {
+		return telefone;
 	}
 
-	public void setId_telefone(Integer id_telefone) {
-		this.id_telefone = id_telefone;
+	public void setTelefone(Telefone telefone) {
+		this.telefone = telefone;
 	}
 
 	public String getEmail() {
@@ -218,19 +234,19 @@ public class Cliente implements Serializable {
 		this.tipo_pessoa = tipo_pessoa;
 	}
 
-//	public boolean isIs_CPF() {
-//		return is_CPF;
-//	}
-//
-//	public void setIs_CPF(boolean is_CPF) {
-//		this.is_CPF = is_CPF;
-//	}
-//
-//	public boolean isIs_CNPJ() {
-//		return is_CNPJ;
-//	}
-//
-//	public void setIs_CNPJ(boolean is_CNPJ) {
-//		this.is_CNPJ = is_CNPJ;
-//	}
+	public boolean isIs_CPF() {
+		return is_CPF;
+	}
+
+	public void setIs_CPF(boolean is_CPF) {
+		this.is_CPF = is_CPF;
+	}
+
+	public boolean isIs_CNPJ() {
+		return is_CNPJ;
+	}
+
+	public void setIs_CNPJ(boolean is_CNPJ) {
+		this.is_CNPJ = is_CNPJ;
+	}
 }

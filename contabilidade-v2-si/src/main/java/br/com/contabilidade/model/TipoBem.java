@@ -1,12 +1,17 @@
 package br.com.contabilidade.model;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 @SuppressWarnings("deprecation")
@@ -37,6 +42,14 @@ public class TipoBem implements Serializable {
 	@Column(nullable = false, length = 150) //Define propriedades da coluna
 	@NotBlank(message = "Tipo do bem é uma informação obrigatória.") //Define qual mensagem será exibida caso a validação da coluna falhar
 	private String tipo;
+	
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "deprec_id_deprec", nullable = false)
+	private Depreciacao deprec;
+	
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "bem_id_bem", nullable = false)
+	private Bem bem;
 	
 	// getters & setters
 	public Long getId_tipo_bem() {

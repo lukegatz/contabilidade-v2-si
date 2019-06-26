@@ -1,12 +1,17 @@
 package br.com.contabilidade.model;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 @SuppressWarnings("deprecation")
@@ -37,6 +42,10 @@ public class TipoConta implements Serializable {
 	@Column(nullable = false, length = 150) //Define propriedades da coluna
 	@NotBlank(message = "Tipo da conta é uma informação obrigatória.") //Define qual mensagem será exibida caso a validação da coluna falhar
 	private String tipo;
+	
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "conta2_id_conta", nullable = false)
+	private Conta conta2;
 	
 	// getters & setters
 	public Long getId_tipo_conta() {
